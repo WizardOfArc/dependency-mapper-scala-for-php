@@ -1,6 +1,5 @@
 package com.wizardofarc.dependencymapper
 
-
 object DependencyGrapher {
 
   def graphDependencies(
@@ -36,7 +35,7 @@ object DependencyGrapher {
     } else {
       val openString = name + " -> {"
       val closeString = "        }[color=" + color + "]"
-      val dependenciesString = dependencies mkString "\n        "
+      val dependenciesString = dependencies map makeNameSafeForGraphiz mkString "\n        "
       openString + "\n        " + dependenciesString + "\n" + closeString + "\n"
     }
   }

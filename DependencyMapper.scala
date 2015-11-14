@@ -13,6 +13,14 @@ object DependencyMapper extends App {
     println("USAGE:\n\tscala DependencyMapper <ClassName> <repo directory>\n")
     System.exit(1)
   }
+  val inputDir = args(1)
+  val seedDirectory = new File(inputDir)
+  if (!seedDirectory.exists){
+    println(s"Starting directory, $inputDir, does not exist")
+    if (inputDir.slice(0,1) == "~")
+      println("Use relative or absolute paths...  I don't like ~'s")
+    System.exit(1)
+  }
   val massivePathsArray = FF.recursiveFilterlessListFiles(new File(args(1))) 
   val FileToPathMap = FF.pathMapFromPathArray(massivePathsArray)
   val initialTarget = args(0)
@@ -59,6 +67,6 @@ object DependencyMapper extends App {
   
   val body = visited.values.toList.mkString(bodyPrefix, bodyDelim, bodySuffix) // this will be the main result
   FW.writeDependencyFile(initialTarget,body)
- 
+  println("look in this directory for the file called \"" + initialTarget + "Dependencies.gv\"") 
 }
 
