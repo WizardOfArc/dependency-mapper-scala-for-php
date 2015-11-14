@@ -1,4 +1,4 @@
-package dependencymapper
+package com.wizardofarc.dependencymapper
 
 import scala.util.matching.Regex
 import scala.collection.mutable

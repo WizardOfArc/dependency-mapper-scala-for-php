@@ -1,10 +1,8 @@
 import java.io.File
 import scala.collection.mutable
-import dependencymapper.{
+import com.wizardofarc.dependencymapper.{
   DependencyGrapher => DG,
-  DependencyFinder => DF
-}
-import dependencymapper.io.{
+  DependencyFinder => DF,
   FileReaderForDependencyMapper => FR,
   FileWriterForDependencyMapper => FW,
   FileFinderForDependencyMapper => FF

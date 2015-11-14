@@ -1,4 +1,4 @@
-package dependencymapper.io
+package com.wizardofarc.dependencymapper
 
 import java.io._
 
