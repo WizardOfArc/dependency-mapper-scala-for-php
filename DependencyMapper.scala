@@ -23,41 +23,15 @@ object DependencyMapper extends App {
   var visited = mutable.Map[String, String]()
   var queue = mutable.Queue[String]()
   
-  def getRepoFromPath(filePath: String): String = {
-    if ( !filePath.contains("/vendor/") ) {
-      "email"
-    } else if (filePath.contains("/vendor/trulia/web/")){
-      "web"
-    } else if (filePath.contains("/vendor/trulia/web-common/")){
-      "common"
-    } else if (filePath.contains("/vendor/trulia/db-handle/")){
-      "db_handle"
-    } else {
-      "external"
-    }
-  }
-
-  def isInTrackingRepo(path: String): Boolean = {
-    val repo = getRepoFromPath(path)
-    repo match {
-     case "email" => true
-     case "common" => true
-     case "web" => true
-     case "db_handle" => true
-     case _ => false
-    }
-  }
-
   def traverseDependencyNode(targetName: String): Unit = {
     val fileName = FF.convertNameToFileName(targetName)
-    if (FileToPathMap.contains(fileName) && isInTrackingRepo(FileToPathMap(fileName))){
+    if (FileToPathMap.contains(fileName)){
       val path = FileToPathMap(fileName)
       val lines = FR.getLineList(path)
       val df = new DF(targetName)
       val dependencies = df.getDependenciesFromLineList(lines)
       visited(targetName) = DG.graphDependencies(
         targetName,
-        getRepoFromPath(path),
         dependencies("requires"),
         dependencies("ancestors"),
         dependencies("statics"),
@@ -73,22 +47,10 @@ object DependencyMapper extends App {
     } else {
       visited(targetName) = DG.graphDependencies(
         targetName,
-        "",
         Nil, Nil, Nil, Nil
       )
     }
   } 
-
-  @annotation.tailrec
-  def recursiveBFS(currentNode:String): Unit = {
-    if (!queue.isEmpty){
-      val newNode = queue.dequeue
-      if(!visited.contains(newNode)){
-       traverseDependencyNode(newNode)
-       recursiveBFS(newNode)
-      }
-    } 
-  }
 
   queue.enqueue(initialTarget)
   while(!queue.isEmpty){

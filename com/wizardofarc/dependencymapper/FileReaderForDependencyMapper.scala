@@ -1,4 +1,4 @@
-package com.wizardorarc.dependencymapper 
+package com.wizardofarc.dependencymapper 
 
   import java.nio.file.{ Files, Paths }
   import scala.io.Source

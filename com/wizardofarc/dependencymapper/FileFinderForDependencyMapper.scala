@@ -4,6 +4,15 @@ import scala.util.matching.Regex
 import java.io.File
 
 object FileFinderForDependencyMapper {
+
+  def convertNameToFileName(name: String):String = {
+    val nameParts = name.split('.')
+      nameParts.length match {
+      case 1 => nameParts(0) + ".php"
+      case _ => name
+    }
+  }
+
   def getLastArrayEntry[T](inputArray: Array[T]): T = {
     val last = inputArray.length - 1
     inputArray(last)
