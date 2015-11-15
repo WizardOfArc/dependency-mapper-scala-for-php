@@ -9,11 +9,12 @@ import com.wizardofarc.dependencymapper.{
 }
 
 object DependencyMapper extends App {
-  if (args.length != 2){
-    println("USAGE:\n\tscala DependencyMapper <ClassName> <repo directory>\n")
+  if (args.length != 3){
+    println("USAGE:\n\tscala DependencyMapper <ClassName> <directory to search in> <directory to write result file in>\n")
     System.exit(1)
   }
   val inputDir = args(1)
+  val targetDirectoryName = args(2)
   val seedDirectory = new File(inputDir)
   if (!seedDirectory.exists){
     println(s"Starting directory, $inputDir, does not exist")
@@ -21,7 +22,7 @@ object DependencyMapper extends App {
       println("Use relative or absolute paths...  I don't like ~'s")
     System.exit(1)
   }
-  val massivePathsArray = FF.recursiveFilterlessListFiles(new File(args(1))) 
+  val massivePathsArray = FF.recursiveFilterlessListFiles(seedDirectory) 
   val FileToPathMap = FF.pathMapFromPathArray(massivePathsArray)
   val initialTarget = args(0)
   val bodyPrefix = "digraph DependenciesMap {\nlabel=\"Dependency Map for " + initialTarget + "\"\n"
@@ -66,7 +67,7 @@ object DependencyMapper extends App {
   }
   
   val body = visited.values.toList.mkString(bodyPrefix, bodyDelim, bodySuffix) // this will be the main result
-  FW.writeDependencyFile(initialTarget,body)
-  println("look in this directory for the file called \"" + initialTarget + "Dependencies.gv\"") 
+  FW.writeDependencyFile(initialTarget,body, targetDirectoryName)
+  println("look in " + targetDirectoryName + " for the file called \"" + initialTarget + "Dependencies.gv\"") 
 }
 
